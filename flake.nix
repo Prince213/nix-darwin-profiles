@@ -18,6 +18,9 @@
         "aarch64-darwin"
         "x86_64-darwin"
       ];
+      flake = {
+        darwinModules.default = ./nix-darwin;
+      };
       perSystem = {
         treefmt = {
           projectRootFile = "flake.nix";
