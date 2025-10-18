@@ -19,7 +19,8 @@
         "x86_64-darwin"
       ];
       flake = {
-        darwinModules.default = ./nix-darwin;
+        darwinModules.default = ./nix-darwin.nix;
+        homeModules.default = ./home-manager.nix;
       };
       perSystem = {
         treefmt = {
