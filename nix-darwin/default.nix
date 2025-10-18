@@ -55,7 +55,7 @@ in
                 default = { };
               };
               payloads = lib.mkOption {
-                type = lib.types.listOf (
+                type = lib.types.attrsOf (
                   lib.types.submodule {
                     freeformType = format.type;
                     config = {
@@ -63,15 +63,23 @@ in
                     };
                   }
                 );
-                default = [ ];
+                default = { };
               };
             };
             config = {
-              path = lib.mkIf (config.payloads != [ ]) (
+              path = lib.mkIf (config.payloads != { }) (
                 lib.mkDefault (
                   format.generate "${name}.mobileconfig" (
                     lib.recursiveUpdate config.topLevel {
-                      PayloadContent = config.payloads;
+                      PayloadContent = lib.attrValues (
+                        lib.mapAttrs (
+                          n: v:
+                          v
+                          // {
+                            PayloadUUID = n;
+                          }
+                        ) config.payloads
+                      );
                     }
                   )
                 )
